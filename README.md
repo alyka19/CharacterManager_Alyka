@@ -1,24 +1,18 @@
-## TP5 – Fitur Analitik Rancangan Sendiri.
-Pada kelas CharacterManager, Saya menambahkan fitur analitik mandiri yaitu method findStrongest(). Method ini dirancang untuk memindai seluruh karakter yang tersimpan di dalam ArrayList dan mengembalikan objek Character yang memiliki nilai attackPower terbesar. Rasionalitas & Penerapan Enkapsulasi: • Kegunaan Analitik: Fitur ini mempermudah sistem dalam menentukan pemain/karakter terkuat untuk keperluan statistik, arena battle, atau penentuan leaderboard. • Penanganan Kasus Khusus (Corner Cases): Jika characterList berada dalam keadaan kosong, method akan secara aman mengembalikan nilai null tanpa menyebabkan crash/IndexOutOfBoundsException. • Penerapan Enkapsulasi & Reference: Method ini mengembalikan reference ke objek Character yang ada atau null. Objek ArrayList utama (characterList) tetap tersembunyi dengan modifier private di dalam CharacterManager, sehingga struktur data internal tidak dapat diubah dari luar tanpa melalui mekanisme method yang sah.
+## TP8 — MainWindow, Data Dinamis & Analisis MVC
 
-📸 Screenshot Output Terminal
-![Screenshot Output](Screenshot 2026-10-17 023451.png)
+### Screenshot Aplikasi
+**1. Kondisi Awal (5 Karakter)**
+![Screenshot 3 Karakter](Screenshot TP8 3 karakter.png)
 
-📁 Struktur Folder Project
-TP5_Tugas/
-├── Screenshot 2026-10-16 011802.png
-├── README.md
-└── src/
-    ├── Main.java
-    └── com/
-        └── unpri/
-            └── charactermanager/
-                └── model/
-                    ├── Character.java
-                    └── CharacterType.java
-                    └── CharacterManager.java
+**2. Setelah Penambahan Data (6 Karakter — Statistik Berubah)**
+![Screenshot 5 Karakter](Screenshot TP8 5 karakter.png)
 
-Nama    : Alyka Shakira Lubis
-Nim     : (253303621239)
-Kelas   : Semester 3 Pagi A
-Link Google Docs : https://docs.google.com/document/d/1kwicniSes-rw6NbUpEToeQa9FSQC1E_l50XHLG52NxQ/edit?usp=sharing
+### Aliran Data & Prinsip MVC
+Aliran data dimulai dari `Main.java` (berperan sebagai Controller/inisialisasi) yang membuat objek-objek `Character` dan menyimpannya ke dalam `CharacterManager` (layer **Model**). Selanjutnya, `CharacterManager` mengelola koleksi data tersebut serta menghitung statistik `getAverageLevel()` secara internal tanpa campur tangan tampilan. Data salinan daftar karakter (`getAllCharacters()`) dan nilai rata-rata level kemudian dikirimkan melalui parameter konstruktor menuju `MainWindow` (layer **View**). `MainWindow` hanya bertugas merender data yang diterima ke dalam komponen `JLabel` secara dinamis menggunakan perulangan, sehingga pemisahan tugas (Separation of Concerns) dalam arsitektur MVC tetap terjaga.
+
+### Daftar Karakter Baru & Alasan Pemilihan
+1. **Raphael (`HEALER`, Level 6):** Ditambahkan untuk melengkapi komposisi tim yang sebelumnya belum memiliki peran penyembuh (*support*), dengan level 6 agar memiliki kapasitas HP dasar yang cukup tinggi (`160 HP`) untuk bertahan di garis belakang.
+2. **Lancelot (`WARRIOR`, Level 7):** Ditambahkan sebagai petarung garis depan kedua dengan level tertinggi (`7`) guna menguji perubahan nilai rata-rata statistik secara signifikan serta memvalidasi perhitungan HP (`170`) dan ATK (`45`).
+
+### Dokumentasi Analisis (Bagian D)
+-Link Google Docs Analisis GUI & MVC : https://docs.google.com/document/d/1XonWHd4YzvKCWsVufNltKQTQ8frGako4CmX2f0v2QcA/edit?usp=sharing
