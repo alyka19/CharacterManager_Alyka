@@ -12,8 +12,8 @@ public class Main {
         manager.addCharacter(new Character("Arjuna", CharacterType.WARRIOR, 5));
         manager.addCharacter(new Character("Merlin", CharacterType.MAGE, 3));
         manager.addCharacter(new Character("Athena", CharacterType.ARCHER, 4));
-        manager.addCharacter(new Character("Raphael", CharacterType.HEALER, 6));
-        manager.addCharacter(new Character("Lancelot", CharacterType.WARRIOR, 7));
+        manager.addCharacter(new Character("Gatotkaca", CharacterType.WARRIOR, 7)); // level tinggi
+        manager.addCharacter(new Character("Morgana", CharacterType.MAGE, 1));      // level rendah
 
         // 2. Ambil kalkulasi statistik dari Model (Menerapkan prinsip MVC)
         double avgLevel = manager.getAverageLevel();
