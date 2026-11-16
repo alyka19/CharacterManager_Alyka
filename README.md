@@ -1,29 +1,24 @@
-# Character Manager — TP3 (Java Visual SIH-6406)
+## TP5 – Fitur Analitik Rancangan Sendiri.
+Pada kelas CharacterManager, Saya menambahkan fitur analitik mandiri yaitu method findStrongest(). Method ini dirancang untuk memindai seluruh karakter yang tersimpan di dalam ArrayList dan mengembalikan objek Character yang memiliki nilai attackPower terbesar. Rasionalitas & Penerapan Enkapsulasi: • Kegunaan Analitik: Fitur ini mempermudah sistem dalam menentukan pemain/karakter terkuat untuk keperluan statistik, arena battle, atau penentuan leaderboard. • Penanganan Kasus Khusus (Corner Cases): Jika characterList berada dalam keadaan kosong, method akan secara aman mengembalikan nilai null tanpa menyebabkan crash/IndexOutOfBoundsException. • Penerapan Enkapsulasi & Reference: Method ini mengembalikan reference ke objek Character yang ada atau null. Objek ArrayList utama (characterList) tetap tersembunyi dengan modifier private di dalam CharacterManager, sehingga struktur data internal tidak dapat diubah dari luar tanpa melalui mekanisme method yang sah.
 
-Aplikasi konsol berbasis Java yang mengimplementasikan fondasi *model layer* untuk sistem manajemen karakter RPG menggunakan prinsip pemrograman berorientasi objek (*Encapsulation*, *Type-Safe Enum*, dan *Constructor Overloading*). Proyek ini dilengkapi validasi atribut (`level` dan `mana`), perhitungan statistik otomatis, serta pengecekan status hidup karakter (`isAlive()`).
+📸 Screenshot Output Terminal
+![Screenshot Output](Screenshot 2026-10-17 023451.png)
 
-## Screenshot Output Terminal
-
-![Output Terminal Character Manager](Screenshot AP3.png)
-
-## Struktur Folder Project
-
-```text
-javavisual-tp03-[NIM]/
+📁 Struktur Folder Project
+TP5_Tugas/
+├── Screenshot 2026-10-16 011802.png
 ├── README.md
-├── screenshots/
-│   └── output.png
-└── CharacterManager/
-    └── src/
-        ├── Main.java
-        └── com/
-            └── unpri/
-                └── charactermanager/
-                    └── model/
-                        ├── Character.java
-                        └── CharacterType.java
+└── src/
+    ├── Main.java
+    └── com/
+        └── unpri/
+            └── charactermanager/
+                └── model/
+                    ├── Character.java
+                    └── CharacterType.java
+                    └── CharacterManager.java
 
 Nama    : Alyka Shakira Lubis
 Nim     : (253303621239)
 Kelas   : Semester 3 Pagi A
-Link Google Docs : https://docs.google.com/document/d/1NfQNNXsIrucDt7KqxUM5YLN8f7SzGLRA_5qK-nVlh0g/edit?usp=sharing
+Link Google Docs : https://docs.google.com/document/d/1kwicniSes-rw6NbUpEToeQa9FSQC1E_l50XHLG52NxQ/edit?usp=sharing
