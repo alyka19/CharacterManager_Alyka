@@ -1,18 +1,15 @@
-## TP8 — MainWindow, Data Dinamis & Analisis MVC
+## TP10 
 
-### Screenshot Aplikasi
-**1. Kondisi Awal (5 Karakter)**
-![Screenshot 3 Karakter](Screenshot TP8 3 karakter.png)
+### Screenshot Perbandingan
+1. Sebelum (v0.3 - Tampilan Standar) : [v0.3 Screenshot](Screenshot TP10 v0.3.png)
+2. Sesudah (v0.4 - AppTheme Integrated) : [v0.4 Screenshot](Screenshot TP10 v0.4.png)
 
-**2. Setelah Penambahan Data (6 Karakter — Statistik Berubah)**
-![Screenshot 5 Karakter](Screenshot TP8 5 karakter.png)
+### Alur MVC & Pengaturan Warna
+Warna dan aturan styling diletakkan di `AppTheme` (layer View) dan bukan di `Character` (layer Model) untuk menjaga prinsip **Separation of Concerns**. Layer Model berfokus murni pada logika bisnis serta state data karakter (seperti HP, level, dan role), sehingga bebas dari ketergantungan library GUI (`java.awt.Color`). Dengan memisahkan visual ke `AppTheme`, perubahan tema tampilan aplikasi dapat dilakukan secara terpusat tanpa risiko merusak atau memodifikasi kode logika internal pada Model.
 
-### Aliran Data & Prinsip MVC
-Aliran data dimulai dari `Main.java` (berperan sebagai Controller/inisialisasi) yang membuat objek-objek `Character` dan menyimpannya ke dalam `CharacterManager` (layer **Model**). Selanjutnya, `CharacterManager` mengelola koleksi data tersebut serta menghitung statistik `getAverageLevel()` secara internal tanpa campur tangan tampilan. Data salinan daftar karakter (`getAllCharacters()`) dan nilai rata-rata level kemudian dikirimkan melalui parameter konstruktor menuju `MainWindow` (layer **View**). `MainWindow` hanya bertugas merender data yang diterima ke dalam komponen `JLabel` secara dinamis menggunakan perulangan, sehingga pemisahan tugas (Separation of Concerns) dalam arsitektur MVC tetap terjaga.
+### Properti Tambahan Swing
+1. **`setToolTipText`**: Menampilkan tooltip interaktif yang berisi deskripsi singkat mengenai role karakter saat kursor pengguna berada di atas kartu.
+2. **`setCursor(Cursor.HAND_CURSOR)`**: Memberikan umpan balik visual (*visual feedback*) dengan mengubah ikon kursor mouse menjadi tangan ketika melintasi kartu karakter, menandakan bahwa komponen tersebut dapat diinteraksi.
 
-### Daftar Karakter Baru & Alasan Pemilihan
-1. **Raphael (`HEALER`, Level 6):** Ditambahkan untuk melengkapi komposisi tim yang sebelumnya belum memiliki peran penyembuh (*support*), dengan level 6 agar memiliki kapasitas HP dasar yang cukup tinggi (`160 HP`) untuk bertahan di garis belakang.
-2. **Lancelot (`WARRIOR`, Level 7):** Ditambahkan sebagai petarung garis depan kedua dengan level tertinggi (`7`) guna menguji perubahan nilai rata-rata statistik secara signifikan serta memvalidasi perhitungan HP (`170`) dan ATK (`45`).
-
-### Dokumentasi Analisis (Bagian D)
--Link Google Docs Analisis GUI & MVC : https://docs.google.com/document/d/1XonWHd4YzvKCWsVufNltKQTQ8frGako4CmX2f0v2QcA/edit?usp=sharing
+### Dokumen Analisis
+Google Docs : https://docs.google.com/document/d/1gGZty9ubI2WGuO2L_JT3AaJRvMwVZAt8jWJRR5yaXbI/edit?usp=sharing
