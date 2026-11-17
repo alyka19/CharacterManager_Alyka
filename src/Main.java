@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 public class Main {
     public static void main(String[] args) {
 
-        // 1. Siapkan DATA (layer Model) - 8 Karakter agar scrollbar aktif
+        // 1. Siapkan DATA (layer Model)
         CharacterManager manager = new CharacterManager();
         manager.addCharacter(new Character("Arjuna",    CharacterType.WARRIOR, 5));
         manager.addCharacter(new Character("Merlin",    CharacterType.MAGE,    3));
@@ -18,13 +18,10 @@ public class Main {
         manager.addCharacter(new Character("Bima",      CharacterType.WARRIOR, 8));
         manager.addCharacter(new Character("Circe",     CharacterType.MAGE,    2));
 
-        // 2. Ambil kalkulasi statistik dari Model (Menerapkan prinsip MVC)
-        double avgLevel = manager.getAverageLevel();
-
-        // 3. Jalankan GUI di Event Dispatch Thread
+        // 2. Jalankan GUI di Event Dispatch Thread dengan menyerahkan MANAGER
         SwingUtilities.invokeLater(() -> {
-            MainWindow window = new MainWindow(manager.getAllCharacters(), avgLevel);
-            window.setVisible(true);    
+            MainWindow window = new MainWindow(manager);
+            window.setVisible(true);
         });
     }
 }

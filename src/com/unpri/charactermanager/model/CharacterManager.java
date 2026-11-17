@@ -8,14 +8,19 @@ import java.util.ArrayList;
  */
 public class CharacterManager {
 
+    private static final int MAX_CHARACTERS = 20;
     private ArrayList<Character> characterList;
 
     public CharacterManager() {
-        this.characterList = new ArrayList<>();   
+        this.characterList = new ArrayList<>();
     }
 
     public boolean addCharacter(Character character) {
-        if (findByName(character.getName()) != null) {   
+        // Validasi Tambahan 2 (Model): Batas maksimal daftar adalah 20 karakter
+        if (characterList.size() >= MAX_CHARACTERS) {
+            throw new IllegalArgumentException("Kapasitas penuh: maksimal " + MAX_CHARACTERS + " karakter");
+        }
+        if (isNameTaken(character.getName())) {
             System.out.println("❌ Gagal: karakter dengan nama '" + character.getName() + "' sudah ada!");
             return false;
         }
@@ -24,13 +29,23 @@ public class CharacterManager {
         return true;
     }
 
-    public Character findByName(String name) {
-        for (Character c : characterList) {         
-            if (c.getName().equals(name)) {          
-                return c;                             
+    /** Mengembalikan true jika sudah ada karakter bernama sama (case-insensitive). */
+    public boolean isNameTaken(String name) {
+        for (Character c : getAllCharacters()) {
+            if (c.getName().equalsIgnoreCase(name)) {
+                return true;
             }
         }
-        return null;                                  
+        return false;
+    }
+
+    public Character findByName(String name) {
+        for (Character c : characterList) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        }
+        return null;
     }
 
     public boolean removeCharacter(String name) {
@@ -39,7 +54,7 @@ public class CharacterManager {
             System.out.println("❌ Gagal hapus: karakter '" + name + "' tidak ditemukan.");
             return false;
         }
-        characterList.remove(target);                 
+        characterList.remove(target);
         System.out.println("🗑️ Karakter '" + name + "' berhasil dihapus.");
         return true;
     }
@@ -49,13 +64,9 @@ public class CharacterManager {
     }
 
     public ArrayList<Character> getAllCharacters() {
-        return new ArrayList<>(characterList);        
+        return new ArrayList<>(characterList);
     }
 
-    /**
-     * Menghitung rata-rata level seluruh karakter di dalam manager.
-     * Ditempatkan di Model agar sesuai dengan prinsip MVC.
-     */
     public double getAverageLevel() {
         if (characterList.isEmpty()) {
             return 0.0;

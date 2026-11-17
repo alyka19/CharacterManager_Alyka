@@ -3,8 +3,8 @@ package com.unpri.charactermanager.view;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.BorderFactory;
@@ -13,22 +13,24 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import com.unpri.charactermanager.model.Character;
+import com.unpri.charactermanager.model.CharacterManager;
 import com.unpri.charactermanager.model.CharacterType;
 
 public class MainWindow extends JFrame {
 
-    private ArrayList<Character> characterList;
-    private double avgLevel;
+    private final CharacterManager manager;
+    private JPanel cardsPanel;
+    private JLabel countLabel;
+    private JLabel statusLabel;
 
-    public MainWindow(ArrayList<Character> characterList, double avgLevel) {
-        super("Character Manager v0.5");
-        this.characterList = characterList;
-        this.avgLevel = avgLevel;
+    public MainWindow(CharacterManager manager) {
+        super("Character Manager v0.6");
+        this.manager = manager;
 
         initComponents();
 
         pack();
-        setMinimumSize(new Dimension(560, 380));
+        setMinimumSize(new Dimension(820, 420));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -38,12 +40,29 @@ public class MainWindow extends JFrame {
         setLayout(new BorderLayout());
 
         add(createHeaderPanel(), BorderLayout.NORTH);
+        add(new CharacterFormPanel(manager, this::refreshList), BorderLayout.WEST);
         add(createListArea(),    BorderLayout.CENTER);
         add(createLegendPanel(), BorderLayout.EAST);
         add(createStatusPanel(), BorderLayout.SOUTH);
+
+        refreshList();
     }
 
-    /** NORTH: Judul di kiri, jumlah karakter di kanan. */
+    /** Membangun ulang kartu dari data Model dan memperbarui semua penghitung. */
+    private void refreshList() {
+        cardsPanel.removeAll();
+        for (Character c : manager.getAllCharacters()) {
+            cardsPanel.add(createCharacterLabel(c));
+        }
+        cardsPanel.revalidate();
+        cardsPanel.repaint();
+
+        int total = manager.getTotalCharacters();
+        double avgLevel = manager.getAverageLevel();
+        countLabel.setText(total + " karakter");
+        statusLabel.setText("Total: " + total + " karakter  |  Avg Level: " + String.format("%.1f", avgLevel) + "  |  Siap");
+    }
+
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(AppTheme.BG_MAIN);
@@ -53,36 +72,31 @@ public class MainWindow extends JFrame {
         title.setFont(AppTheme.FONT_TITLE);
         title.setForeground(AppTheme.TEXT_MAIN);
 
-        JLabel count = new JLabel(characterList.size() + " karakter");
-        count.setFont(AppTheme.FONT_BODY);
-        count.setForeground(AppTheme.GOLD);
+        countLabel = new JLabel(" ");
+        countLabel.setFont(AppTheme.FONT_BODY);
+        countLabel.setForeground(AppTheme.GOLD);
 
         header.add(title, BorderLayout.WEST);
-        header.add(count, BorderLayout.EAST);
+        header.add(countLabel, BorderLayout.EAST);
         return header;
     }
 
-    /** CENTER: Kartu karakter di dalam JScrollPane. */
     private JScrollPane createListArea() {
-        JPanel cards = new JPanel(new GridLayout(0, 1, 0, 8));
-        cards.setBackground(AppTheme.BG_MAIN);
-        for (Character c : characterList) {
-            cards.add(createCharacterLabel(c));
-        }
+        cardsPanel = new JPanel(new GridLayout(0, 1, 0, 8));
+        cardsPanel.setBackground(AppTheme.BG_MAIN);
 
         JPanel holder = new JPanel(new BorderLayout());
         holder.setBackground(AppTheme.BG_MAIN);
-        holder.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 8));
-        holder.add(cards, BorderLayout.NORTH);
+        holder.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        holder.add(cardsPanel, BorderLayout.NORTH);
 
         JScrollPane scroll = new JScrollPane(holder);
         scroll.setBorder(null);
         scroll.getViewport().setBackground(AppTheme.BG_MAIN);
-        scroll.setPreferredSize(new Dimension(460, 280));
+        scroll.setPreferredSize(new Dimension(420, 280));
         return scroll;
     }
 
-    /** Kartu individual karakter. */
     private JLabel createCharacterLabel(Character c) {
         String info = c.getName() + " | " + c.getType()
                     + " | Lv." + c.getLevel()
@@ -100,7 +114,6 @@ public class MainWindow extends JFrame {
         return lbl;
     }
 
-    /** EAST: Legenda role dengan BoxLayout vertikal. */
     private JPanel createLegendPanel() {
         JPanel legend = new JPanel();
         legend.setLayout(new BoxLayout(legend, BoxLayout.Y_AXIS));
@@ -128,22 +141,14 @@ public class MainWindow extends JFrame {
         return legend;
     }
 
-    /** SOUTH: Bar status dengan Mini-Challenge (Teks di kiri, Versi "v0.5" di kanan). */
     private JPanel createStatusPanel() {
-        JPanel status = new JPanel(new BorderLayout());
+        JPanel status = new JPanel(new FlowLayout(FlowLayout.LEFT, 16, 6));
         status.setBackground(AppTheme.BG_STATUS);
-        status.setBorder(BorderFactory.createEmptyBorder(6, 16, 6, 16));
 
-        JLabel lblStatus = new JLabel("Total: " + characterList.size() + " karakter  |  Avg Level: " + String.format("%.1f", avgLevel) + "  |  Siap");
-        lblStatus.setFont(AppTheme.FONT_MONO);
-        lblStatus.setForeground(AppTheme.TEXT_MUTED);
-
-        JLabel lblVersion = new JLabel("v0.5");
-        lblVersion.setFont(AppTheme.FONT_MONO);
-        lblVersion.setForeground(AppTheme.TEXT_MUTED);
-
-        status.add(lblStatus, BorderLayout.WEST);
-        status.add(lblVersion, BorderLayout.EAST);
+        statusLabel = new JLabel(" ");
+        statusLabel.setFont(AppTheme.FONT_MONO);
+        statusLabel.setForeground(AppTheme.TEXT_MUTED);
+        status.add(statusLabel);
         return status;
     }
 }
