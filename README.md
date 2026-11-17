@@ -1,47 +1,44 @@
-## TP12: Sprint #5 — Layout, UI Responsif & Panel Bersarang (v0.5)
+## TP14 — Sprint #6: Form Input, Validasi & Analisis MVC
 
-### 1. Wireframe Layout MainWindow v0.5
-Rancangan tata letak antarmuka **Character Manager v0.5** menggunakan arsitektur panel bersarang (*nested panels*) dengan `BorderLayout` sebagai kerangka utama pada `JFrame`:
+### 1. Screenshot Pengujian
+1. **Validasi Error (Nama Kosong):**
+   ![Error Nama Kosong](Screenshot TP14 error nama kosong.png)
+2. **Validasi Keunikan (Nama Duplikat):**
+   ![Error Nama Duplikat](Screenshot TP14 error nama duplikat.png)
+3. **Input Valid (Kartu Baru Berhasil Ditambahkan):**
+   ![Sukses Tambah Karakter](Screenshot TP14 sukses tambah karakter.png)
 
-```text
-+-----------------------------------------------------------------------+ [NORTH]
-| Character Manager                                        8 karakter   |
-+-----------------------------------------------------------------------+ [CENTER]
-| +-----------------------------------------+ +-----------------------+ |
-| | Arjuna | WARRIOR | Lv.5 | HP:150 | ATK:35| | Legenda Role          | |
-| +-----------------------------------------+ | [WARRIOR]             | |
-| | Merlin | MAGE | Lv.3 | HP:130 | ATK:25   | | [MAGE]                | |
-| +-----------------------------------------+ | [ARCHER]              | |
-| | Athena | ARCHER | Lv.4 | HP:140 | ATK:30 | | [HEALER]              | |
-| +-----------------------------------------+ |                       | |
-| | (JScrollPane: vertikal scroll aktif)    | |                       | |
-| +-----------------------------------------+ +-----------------------+ |
-+-----------------------------------------------------------------------+ [SOUTH]
-| Total: 8 karakter  |  Avg Level: 4.5  |  Siap                    v0.5 |
-+-----------------------------------------------------------------------+
+---
 
-2. Penjelasan Struktur Panel Bersarang (Nested Panels)
-Aplikasi ini membagi layar menjadi empat wilayah fungsional di dalam content pane JFrame yang ber-BorderLayout:
- * Wilayah NORTH (Header): Menggunakan JPanel dengan BorderLayout untuk menempatkan judul aplikasi di sisi kiri (WEST) dan penghitung jumlah karakter di sisi kanan (EAST).
- * Wilayah CENTER (Daftar Karakter Berscroll): Menggunakan JScrollPane yang membungkus panel holder (BorderLayout), di mana daftar kartu ber-GridLayout(0, 1) ditaruh di posisi NORTH holder agar tinggi setiap kartu tetap alami (tidak ikut melar saat jendela ditinggikan).
- * Wilayah EAST (Legenda Role): Menggunakan JPanel dengan BoxLayout vertikal (Y_AXIS), dilengkapi Box.createVerticalStrut() sebagai jarak antar-chip role dan Box.createVerticalGlue() di bagian bawah untuk mendorong seluruh elemen menempel ke atas.
- * Wilayah SOUTH (Bar Status & Mini-Challenge): Menggunakan JPanel dengan BorderLayout agar teks informasi total karakter dan rata-rata level menempel di kiri (WEST), sedangkan label versi "v0.5" menempel di kanan (EAST).
-3. Alasan Pemilihan Layout Panel Tambahan & Layout yang Ditolak
- * Panel Tambahan / Perluasan Status Bar (BorderLayout): Untuk memenuhi Mini-Challenge serta menampilkan ringkasan statistik rata-rata level (Avg Level: 4.5) bersama versi aplikasi "v0.5", bar status diubah dari FlowLayout menjadi BorderLayout. Layout ini dipilih karena mampu memisahkan dua kelompok informasi ke dua kutub berlawanan (WEST dan EAST) dengan jarak tengah yang fleksibel saat jendela dilebarkan.
- * Layout yang Ditolak (FlowLayout & GridLayout): FlowLayout ditolak karena akan membuat teks status dan label versi saling berdempetan di tengah atau rata kiri saja tanpa jarak proporsional ke tepi kanan. GridLayout(1, 2) juga ditolak karena akan membagi ruang bar status menjadi dua kolom kaku berukuran 50:50 sehingga teks status yang panjang berisiko terpotong.
-4. Tabel Pengamatan Uji Resize (Resize Observation Table)
-| Tindakan | Prediksi dari Teori | Catatan Hasil Nyata |
-|---|---|---|
-| Lebarkan Jendela | Hanya area CENTER (JScrollPane) yang melebar secara horizontal; lebar EAST tetap, sedangkan NORTH dan SOUTH melebar tanpa mengubah ukuran teks di dalamnya. | Sesuai prediksi: Daftar kartu karakter melebar mengikuti jendela, sementara legenda di kanan tetap proporsional dan label v0.5 tetap menempel di pojok kanan bawah. |
-| Tinggikan Jendela | Area CENTER bertambah tinggi; kartu-kartu di dalam GridLayout tidak ikut melar vertikal karena diletakkan pada BorderLayout.NORTH di dalam panel holder. | Sesuai prediksi: Ruang kosong di bawah daftar kartu terisi latar gelap dengan rapi dan tinggi tiap kartu tetap konsisten. |
-| Kecilkan Tinggi | Tinggi area daftar menyusut di bawah tinggi total 8 kartu (280 px), sehingga scrollbar vertikal otomatis muncul di sisi kanan daftar. | Sesuai prediksi: Scrollbar vertikal aktif dan daftar 8 karakter dapat digulir dengan mulus tanpa memotong header maupun status bar. |
-| Sempitkan Sampai Batas | Jendela berhenti mengecil pada ukuran minimum 560x380 piksel berkat pengaturan setMinimumSize(). | Sesuai prediksi: Jendela tertahan pada batas minimum sehingga komponen tidak bertumpuk (overlapping). |
-5. Bukti Screenshot Antarmuka (v0.5)
- * Ukuran Awal (Initial State - saat program pertama kali dijalankan):Screenshoot Tp 12 ukuran awal.png
-   
- * Jendela Dilebarkan (Expanded State - seluruh 8 karakter tampak tanpa scroll):Screenshot TP12 ukuran dilebarkan.png
-   
- * Jendela Dikecilkan (Scrollbar Active - scrollbar vertikal muncul):Screenshot TP12 ukuran dikecilkan.png
-   
-6. Analisis Layout & MVC (Bagian D)
- * Dokumen Analisis Google Docs: https://docs.google.com/document/d/1z3ZErBpjOrQUEDWhkv2dzEQMitFYZ537iH82SqM-G2M/edit?usp=sharing
+### 2. Matriks Uji Input (10 Kasus Uji)
+
+| No | Input (Nama, Role, Level) | Hasil Diharapkan | Hasil Nyata | Lapisan yang Menangkap |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | Nama: `""` (kosong), Role: `WARRIOR`, Level: `1` | Muncul pesan merah `"Nama wajib diisi"`, border `nameField` merah, kursor fokus ke `nameField`. | Sesuai harapan. Form menolak simpan dan border merah aktif. | **View** (`CharacterFormPanel.validateName`) |
+| 2 | Nama: `"   "` (hanya spasi), Role: `WARRIOR`, Level: `1` | Dianggap kosong setelah `trim()`, pesan `"Nama wajib diisi"`, border merah. | Sesuai harapan. Spasi dibersihkan oleh `trim()` lalu ditolak. | **View** (`CharacterFormPanel.onSave` & `validateName`) |
+| 3 | Nama: `"Ab"`, Role: `ARCHER`, Level: `5` | Muncul pesan `"Nama harus 3-20 karakter"`, border `nameField` merah. | Sesuai harapan. Gagal pada validasi panjang karakter. | **View** (`CharacterFormPanel.validateName`) |
+| 4 | Nama: `"Arjuna123"`, Role: `WARRIOR`, Level: `10` | Muncul pesan `"Nama hanya huruf dan spasi"`, border `nameField` merah. | Sesuai harapan. Regex `[A-Za-z ]+` menolak angka. | **View** (`CharacterFormPanel.validateName`) |
+| 5 | Nama: `"arjuna"` (huruf kecil), Role: `MAGE`, Level: `5` | Muncul pesan `"Nama sudah dipakai"`, karena `"Arjuna"` sudah terdaftar. | Sesuai harapan. `equalsIgnoreCase` mendeteksi duplikasi. | **Model via View** (`CharacterManager.isNameTaken`) |
+| 6 | Nama: `"  Bima Sakti  "`, Role: `ARCHER`, Level: `12` | Tersimpan sebagai `"Bima Sakti"`, kartu hijau muncul, pesan hijau `"Tersimpan: Bima Sakti"`, form ter-reset. | Sesuai harapan. Spasi tepi dibuang dan daftar langsung ter-refresh. | **Sukses** (Lolos View & Model) |
+| 7 | Nama: `"Gandalf"`, Role: `MAGE`, Level: `65` *(Mini-Challenge)* | Muncul pesan merah `"Level MAGE maksimal adalah 60"`, border `levelSpinner` merah. | Sesuai harapan. Pesan dari Model tampil langsung di View tanpa mengubah kode View. | **Model** (`Character` constructor) |
+| 8 | Nama: `"Rafael"`, Role: `HEALER`, Level: `2` *(Validasi Tambahan 1)* | Muncul pesan merah `"Level HEALER minimal adalah 5"`, border `levelSpinner` merah. | Sesuai harapan. Aturan domain `HEALER` terjaga di Model. | **Model** (`Character` constructor) |
+| 9 | Nama: `"Ksatria"`, Role: `WARRIOR`, Level: `500` (diketik manual di spinner) | Spinner menolak nilai di luar rentang `1-99` saat `commitEdit()` dan mengembalikannya ke nilai valid sebelumnya (`1`). | Sesuai harapan. Tidak ada karakter berlevel > 99 yang bisa masuk. | **Komponen UI** (`SpinnerNumberModel`) & **Model** (`Character`) |
+| 10 | Menambah karakter ke-21 saat daftar sudah berisi 20 karakter *(Validasi Tambahan 2)* | Muncul pesan merah `"Kapasitas penuh: maksimal 20 karakter"`, karakter ke-21 ditolak. | Sesuai harapan. Kapasitas list terjaga di `CharacterManager`. | **Model** (`CharacterManager.addCharacter`) |
+
+#### Catatan Pengujian & Penjelasan Lokasi Validasi Tambahan
+* **Perilaku Spinner (`Level: 500`):** Saat angka `500` diketik langsung pada `JSpinner` lalu tombol **Simpan** ditekan, `levelSpinner.commitEdit()` mendeteksi bahwa nilai tersebut melampaui batas maksimum `SpinnerNumberModel` (`99`) sehingga melempar `ParseException` atau mengembalikan nilai ke nilai sah terakhir, memastikan lapisan Model tidak pernah menerima level tidak valid.
+* **Alasan Lokasi Validasi Tambahan 1 (`HEALER` minimal level 5 $\rightarrow$ Model `Character`):** Aturan ini merupakan aturan bisnis/domain yang melekat pada entitas `Character` itu sendiri. Dengan meletakkannya di konstruktor `Character`, aturan ini tetap berlaku meskipun objek dibuat lewat konsol, database, atau file JSON tanpa melewati form GUI.
+* **Alasan Lokasi Validasi Tambahan 2 (Maksimal 20 karakter $\rightarrow$ Model `CharacterManager`):** Aturan kapasitas daftar berkaitan dengan pengelolaan koleksi objek secara keseluruhan, yang merupakan tanggung jawab tunggal `CharacterManager`, bukan tugas tampilan (`View`).
+
+---
+
+### 3. Penjelasan Kompromi Sementara (Arsitektur)
+Pada Sprint #6 ini terdapat dua kompromi arsitektur yang disengaja agar fokus tetap pada mekanisme input dan validasi:
+1. **Penggunaan `ActionListener` minimal (lambda satu baris):** Penanganan klik tombol Simpan dan tekan Enter pada `nameField` masih ditulis langsung menggunakan lambda singkat (`e -> onSave()`) di dalam panel View, dan belum dipisahkan ke kelas *listener* khusus.
+2. **Pemanggilan `manager.addCharacter()` langsung dari View:** `CharacterFormPanel` berinteraksi langsung dengan objek Model (`CharacterManager`) untuk menyimpan data. Pada Pertemuan 9 mendatang, alur ini akan dirapikan dengan memindahkan logika koordinasi dan *event handling* tersebut ke lapisan **Controller** agar pemisahan tanggung jawab MVC (Model-View-Controller) menjadi sepenuhnya bersih.
+
+---
+
+### 4. Link Dokumen Analisis (Bagian D)
+* **Google Docs Analisis Input & Validasi:** (https://docs.google.com/document/d/1WGKQfxigMUt2IgjX7vGvnNjOF1VeYrsLyyptOGd7ff4/edit?usp=sharing)
+*
