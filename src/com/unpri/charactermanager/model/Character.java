@@ -1,33 +1,27 @@
 package com.unpri.charactermanager.model;
 
-/**
- * Merepresentasikan satu karakter dalam aplikasi Character Manager.
- * Menerapkan prinsip Encapsulation: semua atribut private,
- * akses hanya melalui getter/setter.
- */
 public class Character {
-
-    // ===== ATRIBUT (private — tidak bisa diakses langsung dari luar class) =====
+    
     private int id;
     private String name;
     private CharacterType type;
     private int level;
     private int hitPoints;
     private int attackPower;
-    private int mana; // Atribut baru untuk menyimpan nilai mana
+    private int mana; // Atribut private baru 
 
-    // ===== CONSTRUCTOR 1: untuk membuat karakter BARU =====
-    public Character(String name, CharacterType type, int level) {
+    // Constructor 1
+    public Character(String name, CharacterType type, int level)  {
         this.name = name;
         this.type = type;
         this.level = level;
         this.hitPoints = calculateBaseHP();
         this.attackPower = calculateBaseAttack();
-        this.mana = calculateBaseMana(); // Mana dihitung otomatis dari level
+        this.mana = 50; // Nilai default mana awal 
     }
 
-    // ===== CONSTRUCTOR 2: untuk MEMUAT karakter dari database =====
-    public Character(int id, String name, CharacterType type, int level, int hitPoints, int attackPower, int mana) {
+    // Constructor 2
+    public Character(int id, String name, CharacterType type, int level, int hitPoints, int attackPower, int mana)  {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -37,29 +31,23 @@ public class Character {
         this.mana = mana;
     }
 
-    // ===== HELPER PRIVATE: hanya dipakai internal class ini =====
-    private int calculateBaseHP() {
+    private int calculateBaseHP()  {
         return 100 + (level * 10);
     }
 
-    private int calculateBaseAttack() {
+    private int calculateBaseAttack()  {
         return 10 + (level * 5);
     }
 
-    private int calculateBaseMana() {
-        return 50 + (level * 5);     // contoh: level 5 → Mana = 75
-    }
+    // Getter dan Setter
+    public int getId()  { return id; }
+    public String getName()  { return name; }
+    public CharacterType getType()  { return type; }
+    public int getLevel()  { return level; }
+    public int getHitPoints()  { return hitPoints; }
+    public int getAttackPower()  { return attackPower; }
+    public int getMana() { return mana; } // Getter mana baru
 
-    // ===== GETTER: cara AMAN membaca nilai atribut private dari luar =====
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public CharacterType getType() { return type; }
-    public int getLevel() { return level; }
-    public int getHitPoints() { return hitPoints; }
-    public int getAttackPower() { return attackPower; }
-    public int getMana() { return mana; } // Getter untuk mana
-
-    // ===== SETTER: cara AMAN mengubah atribut, dengan VALIDASI =====
     public void setId(int id) {
         this.id = id;
     }
@@ -71,24 +59,22 @@ public class Character {
         this.level = level;
         this.hitPoints = calculateBaseHP();
         this.attackPower = calculateBaseAttack();
-        this.mana = calculateBaseMana(); // Mana ikut dihitung ulang saat level naik
     }
 
-    // Setter untuk mana dengan validasi tidak boleh negatif
+    // Setter mana dengan validasi IllegalArgumentException jika negatif
     public void setMana(int mana) {
         if (mana < 0) {
-            throw new IllegalArgumentException("Mana tidak boleh negatif!");
+            throw new IllegalArgumentException("Mana tidak boleh bernilai negatif!");
         }
         this.mana = mana;
     }
 
-    // ===== METHOD BARU: Mengecek apakah karakter masih hidup =====
+    // Method baru isAlive()
     public boolean isAlive() {
-        return hitPoints > 0;
+        return this.hitPoints > 0;
     }
 
-    // ===== toString(): representasi teks object, diperbarui dengan mana =====
-    @Override
+    @Override 
     public String toString() {
         return "Character{id=" + id +
                ", name='" + name + '\'' +
@@ -96,16 +82,6 @@ public class Character {
                ", level=" + level +
                ", hp=" + hitPoints +
                ", atk=" + attackPower +
-               ", mana=" + mana + '}';
-    }
-
-     // ===== equals(): membandingkan ISI DATA, bukan alamat memori =====
-    // Dua Character dianggap "sama" jika NAMA-nya identik (case-sensitive)
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;                    // optimasi: jika memang object yang sama persis
-        if (!(obj instanceof Character)) return false;    // jika bukan Character, pasti tidak sama
-        Character other = (Character) obj;                // casting aman karena sudah dicek instanceof
-        return this.name.equals(other.name);               // bandingkan isi atribut name (String punya equals sendiri)
+               ", mana=" + mana + '}'; // Ditambahkan informasi mana
     }
 }
